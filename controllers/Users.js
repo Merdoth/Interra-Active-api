@@ -79,43 +79,43 @@ class Users {
      */
     static signInUser(req, res) {
       const { email, password } = req.body;
-      User.findOne({
-        where: {
+      if(!email && !password){
+        return res.status(400).send({ message: 'Olodo how do you want to submit an empty form'})
+      }
+      if(email.trim() != '' && password.trim() != '') {
+        User.findOne({
+          where: {
             email
           }
-      })
-        .then((user) => {
-          if (user) {
-            if (bcrypt.compareSync(password, user.password)) {
-              const token = jwt.sign(
-                {
-                  id: user.id,
-                  email: user.email
-                },
-                process.env.SECRET_KEY,
-                {
-                  expiresIn: 60 * 60 * 24 // Token expires in 24 hours
-                }
-              );
-              return res.status(200).send({
-                message: 'Welcome! successfully signed in.',
-                token
-              });
-            } else if(user.email === req.body.email){
-              return res.status(400)
-                .send({ message: 'Incorrect email!' });
-            }
-            else {
-                return res.status(400)
-                  .send({ message: 'Incorrect login details!' });
-              }
-          }
-          return res.status(404).send({ message: 'User does not exist!' });
         })
-        .catch((err) => {
-          res.status(500).send({ error: err });
-        });
+        .then((userFound) => {
+          if(!userFound){
+            return res.status(404).send({
+              message: 'User not found!'
+            })
+          }
+          if(bcrypt.compareSync(password, userFound.password)){
+            const token = jwt.sign(
+              {
+                id: userFound.id,
+                email: userFound.email
+              },
+              process.env.SECRET_KEY, 
+              {
+                expiresIn: '24h'
+              }
+            )
+            return res.status(200).send({ 
+            message: 'User successfully found!',
+            token
+          })
+        }
+        })
+        .catch(err => {res.status(500).send({error: err})})
+    }else {
+      return res.status(400).send({message: 'fields cannot be empty!!'})
     }
+   }
   }
   
   export default Users;
