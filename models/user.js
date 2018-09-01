@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define('users', {
+  const User = sequelize.define('user', {
     fullName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -44,20 +44,20 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-//   users.associate = (models) => {
-//     users.hasMany(models.recipes, {
-//       foreignKey: 'userId'
-//     });
-//     users.hasMany(models.reviews, {
-//       foreignKey: 'userId'
-//     });
-//     users.hasMany(models.favorites, {
-//       foreignKey: 'userId'
-//     });
-//     users.hasMany(models.votes, {
-//       foreignKey: 'userId'
-//     });
-//   };
+  User.associate = (models) => {
+    User.hasMany(models.question, {
+      foreignKey: 'userId'
+    });
+    User.hasMany(models.answer, {
+      foreignKey: 'userId'
+    });
+    User.hasMany(models.vote, {
+      foreignKey: 'userId'
+    });
+    User.hasMany(models.comment, {
+      foreignKey: 'userId'
+    });
+  };
 
   User.beforeCreate((user) => {
     user.dataValues.password = bcrypt.hashSync(

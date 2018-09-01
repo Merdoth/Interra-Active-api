@@ -5,9 +5,9 @@ import generateToken from '../utils/token';
 
 
 // create reference to db model
-const User = models.users;
-// const Answers = models.answers;
-// const Questions = models.questions;
+const User = models.user;
+const Answer = models.answer;
+const Question = models.question;
 
 
 /**
@@ -40,34 +40,34 @@ class Users {
         .catch(err => res.status(400).send({ err }));
     }
   
-    // /**
-    //  * @description get a user controller
-    //  *
-    //  * @param {Object} req - Request object
-    //  * @param {Object} res - Response object
-    //  *
-    //  * @returns {Object} json - payload
-    //  */
-    // static getUserProfile(req, res) {
-    //   Users.findById(req.decoded.id, {
-    //     include: [{ model: Questions.count && Questions }, {model: Answers.count && Answers}],
-    //     attributes: ['fullName', 'userName', 'email']
-    //   })
-    //     .then((user) => {
-    //       if (!user) {
-    //         return res.status(404).send({
-    //           message: 'This user does not exist.',
-    //         });
-    //       }
-    //       res.status(200).send({ 
-    //           message: 'Found you',
-    //           user 
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       res.status(500).send({ error: err });
-    //     });
-    // }
+    /**
+     * @description get a user controller
+     *
+     * @param {Object} req - Request object
+     * @param {Object} res - Response object
+     *
+     * @returns {Object} json - payload
+     */
+    static getUserProfile(req, res) {
+      User.findById(req.decoded.id, {
+        include: [{ model: Question.count && Question }, {model: Answer.count && Answer}],
+        attributes: ['fullName', 'userName', 'email']
+      })
+        .then((user) => {
+          if (!user) {
+            return res.status(404).send({
+              message: 'This user does not exist.',
+            });
+          }
+          res.status(200).send({ 
+              message: 'Found you',
+              user 
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({ error: err });
+        });
+    }
   
     /**
      * @description sign in user controller
