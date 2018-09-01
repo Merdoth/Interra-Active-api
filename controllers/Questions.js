@@ -86,6 +86,40 @@ class Questions {
       .catch(error => res.status(500).send({ error }));
   }
 
+    /**
+   * @description get a question controller
+   *
+   * @param { Object } req - Request object
+   * @param { Object } res - Response object
+   *
+   * @returns { Object } json - payload
+   */
+
+   static getAQuestion (req, res) {    
+    Question
+    .findOne({
+      where: {
+        id: req.params.questionId
+      },
+      include: [{ model: Answer }]
+    })
+    .then((questionFound) => {
+      if(!questionFound) {
+       return res.status(404).send({
+         message: "Question with this id does not exist or has been deleted!"
+        });
+      }
+      if(questionFound) {
+        return res.status(200).send({
+          message: "Question successfully found!",
+          questionFound
+        });
+      }
+      return res.status(404).send({message: "No question with this ID found."})
+    })
+    .catch(error => res.status(500).send({ error: error.message}));
+  }
+
 }
 
 export default Questions;

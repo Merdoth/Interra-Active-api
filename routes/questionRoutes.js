@@ -12,5 +12,6 @@ import auth from '../middleware/authorization';
 const questionRoutes = (router) => {
     router.post('/questions/add', auth.authorize, Questions.addQuestion);
     router.get('/questions', auth.authorize, Questions.getAllQuestions);
+    router.get('/questions/:questionId', auth.authorize, Questions.getAQuestion);
 };
 export default questionRoutes;
