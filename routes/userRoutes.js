@@ -1,6 +1,6 @@
 import Users from '../controllers/Users';
 import auth from '../middleware/authorization';
-// import checkUserExists from '../middleware/checkUserExists';
+import checkUserExists from '../middleware/checkUserExist';
 
 /**
  * @description user routes
@@ -11,7 +11,7 @@ import auth from '../middleware/authorization';
  */
 const userRoutes = (router) => {
   router.get('/users/profile', auth.authorize, Users.getUserProfile);
-  router.post('/users/signup', Users.signUpUser
+  router.post('/users/signup', checkUserExists, Users.signUpUser
   );
   router.post('/users/signin', Users.signInUser);
 };

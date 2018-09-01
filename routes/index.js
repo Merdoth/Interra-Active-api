@@ -1,6 +1,6 @@
 // import controllers
 import usersRoutes from './userRoutes';
-// import questionRoutes from './questionRoutes';
+import questionRoutes from './questionRoutes';
 
 /**
  * @description index routes
@@ -11,7 +11,7 @@ import usersRoutes from './userRoutes';
  */
 const routes = (router) => {
   usersRoutes(router);
-//   questionRoutes(router);
+  questionRoutes(router);
 };
 
 export default routes;
