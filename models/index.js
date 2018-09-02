@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import config from '../config/config';
 
 dotenv.config();
-console.log(config, 'this is the config returned!!!')
+// console.log(config, 'this is the config returned!!!')
 
 const db = {};
 const sequelize = new Sequelize(config.url, config);

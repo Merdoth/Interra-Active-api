@@ -3,7 +3,9 @@ import pagination, { paginates } from '../utils/pagination';
 
 
 // create reference database model
-const Questions = models.questions;
+const Question = models.question;
+const Answer = models.answer;
+
 
 let query = {};
 
@@ -11,7 +13,7 @@ let query = {};
 /**
  * @class
  */
-class Question {
+class Questions {
     /**
      * @description add question controller
      *
@@ -20,9 +22,9 @@ class Question {
      *
      * @returns { Object } json - payload
      */
-    static addQuestion(req, res) {
+  static addQuestion(req, res) {
       const { question } = req.body;
-      Questions
+      Question
         .create({
           userId: req.decoded.id,
           question
@@ -45,18 +47,19 @@ class Question {
    *
    * @returns { Object } json - payload
    */
+
   static getAllQuestions(req, res) {
     let { limit, offset, page } = req.query;
     page = page || 1;
     limit = limit || 6;
     offset = limit * (page - 1) || 0;
       query = {
-        include: [{ model: answers }],
+        include: [{ model: Answer }],
         order: [['createdAt', 'DESC']],
         offset,
         limit: 10
       };
-      Questions
+      Question
       .findAndCountAll(query)
       .then((questionsFound) => {
         if (questionsFound.length < 1) {
@@ -83,6 +86,40 @@ class Question {
       .catch(error => res.status(500).send({ error }));
   }
 
+    /**
+   * @description get a question controller
+   *
+   * @param { Object } req - Request object
+   * @param { Object } res - Response object
+   *
+   * @returns { Object } json - payload
+   */
+
+   static getAQuestion (req, res) {    
+    Question
+    .findOne({
+      where: {
+        id: req.params.questionId
+      },
+      include: [{ model: Answer }]
+    })
+    .then((questionFound) => {
+      if(!questionFound) {
+       return res.status(404).send({
+         message: "Question with this id does not exist or has been deleted!"
+        });
+      }
+      if(questionFound) {
+        return res.status(200).send({
+          message: "Question successfully found!",
+          questionFound
+        });
+      }
+      return res.status(404).send({message: "No question with this ID found."})
+    })
+    .catch(error => res.status(500).send({ error: error.message}));
+  }
+
 }
 
-export default Question;
+export default Questions;
