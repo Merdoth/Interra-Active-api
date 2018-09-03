@@ -86,7 +86,7 @@ class Questions {
       .catch(error => res.status(500).send({ error }));
   }
 
-    /**
+  /**
    * @description get a question controller
    *
    * @param { Object } req - Request object
@@ -119,6 +119,39 @@ class Questions {
     })
     .catch(error => res.status(500).send({ error: error.message}));
   }
+  
+  /**
+   * @description delete a question controller
+   *
+   * @param { Object } req - Request object
+   * @param { Object } res - Response object
+   *
+   * @returns { Object } json - payload
+   */
+
+   static deleteAQuestion (req, res) {
+     const { id } = req.decoded
+     Question
+     .findOne({
+       where: {
+        id: req.params.questionId
+       }
+     })
+     .then((foundQuestion) => { 
+       if (!foundQuestion) {
+         return res.status(404).send({message: "Question does not exist!"})
+       }
+       if(foundQuestion.userId === id) {
+         foundQuestion.destroy()
+         .then(() => { 
+           res.status(200).send({message: "Question successfully deleted!"})
+         });
+       } else {
+          return res.status(409).send({message: "You're not authorized to delete this question"})
+         }
+     })
+     .catch((error) => res.status(500).send({error: error.message}))
+   }
 
 
     /**

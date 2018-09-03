@@ -14,5 +14,6 @@ const questionRoutes = (router) => {
     router.get('/questions', auth.authorize, Questions.getAllQuestions);
     router.get('/questions/:questionId', auth.authorize, Questions.getAQuestion);
     router.get('/user/questions', auth.authorize, Questions.getUserQuestions);
+    router.delete('/questions/:questionId', auth.authorize, Questions.deleteAQuestion);
 };
 export default questionRoutes;
