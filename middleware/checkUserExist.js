@@ -1,7 +1,7 @@
 // import models from model directory
 import models from '../models';
 
-const Users = models.users;
+const User = models.user;
 
 /**
  * @description checks if user exists
@@ -14,7 +14,7 @@ const Users = models.users;
  */
 const checkUserExists = (req, res, next) => {
   const { userName, email } = req.body;
-  return Users.findOne({
+  return User.findOne({
     where: {
       $or: [
         {
@@ -40,7 +40,7 @@ const checkUserExists = (req, res, next) => {
       next();
     })
     .catch((err) => {
-      res.status(400).send({ error: err });
+      res.status(400).send({ error: err.message });
     });
 };
 

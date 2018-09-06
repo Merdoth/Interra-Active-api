@@ -11,7 +11,7 @@ import checkUserExists from '../middleware/checkUserExist';
  */
 const userRoutes = (router) => {
   router.get('/users/profile', auth.authorize, Users.getUserProfile);
-  router.post('/users/signup', checkUserExists, Users.signUpUser
+  router.post('/users/signup',  Users.signUpUser
   );
   router.post('/users/signin', Users.signInUser);
 };
