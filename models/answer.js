@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const Answer = sequelize.define('answer', {
       userId: {
         type: DataTypes.INTEGER,
-        // onDelete: 'CASCADE',
+        onDelete: 'CASCADE',
         references: {
           model: 'users',
           key: 'id',
