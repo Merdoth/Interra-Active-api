@@ -120,6 +120,51 @@ class Questions {
     .catch(error => res.status(500).send({ error: error.message}));
   }
 
+
+    /**
+   * @description get a users questions controller
+   *
+   * @param { Object } req - Request object
+   * @param { Object } res - Response object
+   *
+   * @returns { Object } json - payload
+   */
+
+  static getUserQuestions(req, res) {
+    const { id } = req.decoded;
+      Question
+      .findAndCountAll({
+        where: {
+          userId: id,
+        }, 
+        include: [{ model: Answer }],
+      })
+      .then((questionsFound) => {        
+        if (questionsFound.length < 1) {
+          return res.status(404).send({
+            message: 'No questions found. Please try to ask one.'
+          });
+        }
+        query.offset = req.query.offset || 0;
+        query.limit = req.query.limit || 10;
+        const paginate = pagination(
+          query.limit,
+          query.offset,
+          questionsFound.count
+        );
+        if (questionsFound) {
+          return res.status(200).send({
+            messsage: 'All your questions successfully found.',
+            paginate,
+            questionsFound
+          });
+        }
+        return res.status(404).send({ message: 'Questions not found' });
+      })
+      .catch(error => res.status(500).send({ error }));
+  }
+
+
 }
 
 export default Questions;
