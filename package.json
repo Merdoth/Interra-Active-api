@@ -25,7 +25,7 @@
     "lodash": "4.17.5",
     "logger": "0.0.1",
     "morgan": "^1.9.0",
-    "nightwatch": "^0.9.21",
+    "nightwatch": "^2.3.9",
     "nodemon": "^1.18.3",
     "path": "^0.12.7",
     "pg": "7.3.0",
